@@ -91,7 +91,14 @@ export function cloneDeep (data, hash = new WeakMap()) {
       if (hash.has(data)) {
         return hash.get(data)
       }
-      copyData = new Constructor()
+      // let allDesc = Object.getOwnPropertyDescriptors(data) //遍历传入参数所有键的特性
+      // copyData = Object.create(Object.getPrototypeOf(data), allDesc) //继承原型链
+      try {
+        copyData = new Constructor()
+      } catch (e) {
+        // 某些对象构造函数有参数
+        copyData = new Constructor(data)
+      }
       hash.set(data, copyData)
   }
   // 属性名称为Symbol类型的拷贝
